@@ -1,18 +1,26 @@
 [
     {
         "id": 1,
-        "title": "Theme (A to Z)"
+        "title": "Theme (A to Z)",
+        "comparator": "theme",
+        "order": "asc"
     },
     {
         "id": 2,
-        "title": "Theme (Z to A)"
+        "title": "Theme (Z to A)",
+        "comparator": "theme",
+        "order": "desc"
     },
     {
         "id": 3,
-        "title": "Title (A to Z)"
+        "title": "Title (A to Z)",
+        "comparator": "title",
+        "order": "asc"
     },
     {
         "id": 4,
-        "title": "Title (Z to A)"
+        "title": "Title (Z to A)",
+        "comparator": "title",
+        "order": "desc"
     }
 ]

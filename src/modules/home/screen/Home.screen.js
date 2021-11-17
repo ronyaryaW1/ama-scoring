@@ -15,7 +15,7 @@ import getData from '../../../components/GetData';
 import {AuthConfig, defaultAuthState} from '../../../config/Auth.cfg';
 import filterJson from './json/filter.json';
 import dataJson from './json/data.json';
-import FilterItem from '../../../components/FilterItem';
+// import FilterItem from '../../../components/FilterItem';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);

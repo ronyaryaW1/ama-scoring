@@ -14,21 +14,22 @@ import {
 } from 'react-native';
 
 import CardScoring from '../../../components/CardScoring';
-import {FilterFeature} from '../../../components/FilterFeature';
-import CheckBox from 'react-native-check-box';
+// import {FilterFeature} from '../../../components/FilterFeature';
+// import CheckBox from 'react-native-check-box';
 // import {CheckBox} from 'react-native-elements';
 import {FlatList} from 'react-native-gesture-handler';
-import FilterItem from '../../../components/FilterItem';
+// import FilterItem from '../../../components/FilterItem';
 import {Checkbox, NativeBaseProvider} from 'native-base';
-import {useFocusEffect} from '@react-navigation/core';
+import _ from 'lodash';
+// import {useFocusEffect} from '@react-navigation/core';
 
 const Scoring = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const getData = require('../json/filter.json');
-  const getContent = require('../json/data.json');
+  const getContent = require('../json/data');
   const [data, setData] = useState(getData);
-  const [isOpen, setisOpen] = React.useState(false);
-  const [check, setCheck] = useState(false);
+  // const [isOpen, setisOpen] = React.useState(false);
+  // const [check, setCheck] = useState(false);
   const Sort = require('../../../assets/icon/Sort.png');
   const Filter = require('../../../assets/icon/Filter.png');
   const SortJson = require('../json/sort.json');
@@ -48,10 +49,6 @@ const Scoring = ({navigation}) => {
     setModalVisible(false);
   };
   const newContent = getContent.filter(x => x.theme === selecTId);
-  console.log(
-    'content',
-    getContent.filter(x => x.theme === selectFilter),
-  );
 
   const onPressSort = () => {
     setSelectFilter('Sort');
@@ -73,8 +70,9 @@ const Scoring = ({navigation}) => {
     datas = newContent;
   }
 
-  // console.log('datasssss', datas);
-
+  const menuSort = SortJson.find(x => x.title === selecTId);
+  const sort = _.orderBy(content, [menuSort.comparator], [menuSort.order]);
+  datas = sort;
   const ListEmprtyData = () => (
     <View
       style={{
@@ -184,23 +182,69 @@ const Scoring = ({navigation}) => {
                   <Text style={styles.textTitle}>
                     {selectFilter === 'Filter' ? 'Filter' : 'Sort'}
                   </Text>
-                  {}
-                  <TouchableOpacity onPress={() => setSelectFilter()}>
-                    <Text style={styles.textReset}>Reset Filter</Text>
-                  </TouchableOpacity>
+                  {selectFilter === 'Filter' && (
+                    <TouchableOpacity onPress={() => setSelectFilter()}>
+                      <Text style={styles.textReset}>Reset Filter</Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
                 <View style={styles.inputContainer}>
-                  <Text style={styles.textTitle}>Theme</Text>
+                  {selectFilter === 'Filter' && (
+                    <Text style={styles.textTitle}>Theme</Text>
+                  )}
                   <FlatList
                     data={selectFilter === 'Filter' ? data : SortJson}
                     renderItem={({item, index}) => (
-                      <View key={index} style={styles.contentContainer}>
-                        <Text style={styles.textContent}>{item.title}</Text>
-                        <Checkbox
-                          value={item.title}
-                          accessibilityLabel="menu-filter"
-                          onPress={() => setSelectedId(item.title)}
-                        />
+                      <View key={index}>
+                        {/* filter fitur */}
+                        {selectFilter === 'Filter' ? (
+                          <View style={styles.contentContainer}>
+                            <Text style={styles.textContent}>{item.title}</Text>
+                            <Checkbox
+                              value={item.title}
+                              accessibilityLabel="menu-filter"
+                              onPress={() => setSelectedId(item.title)}
+                            />
+                          </View>
+                        ) : (
+                          // sort fitur
+                          <View style={styles.contentContainer}>
+                            <View>
+                              <Text style={styles.textContent}>
+                                {item.title}
+                              </Text>
+                            </View>
+                            <TouchableOpacity
+                              onPress={() => setSelectedId(item.title)}>
+                              <View
+                                style={{
+                                  width: 14,
+                                  height: 14,
+                                  borderRadius: 20,
+                                  borderWidth: 1,
+                                  borderColor:
+                                    item.title === selecTId
+                                      ? '#085D7A'
+                                      : 'grey',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}>
+                                <View
+                                  style={{
+                                    width: 10,
+                                    height: 10,
+                                    borderRadius: 20,
+                                    backgroundColor:
+                                      item.title === selecTId
+                                        ? '#085D7A'
+                                        : '#FFFFFF',
+                                    alignSelf: 'center',
+                                  }}
+                                />
+                              </View>
+                            </TouchableOpacity>
+                          </View>
+                        )}
                       </View>
                     )}
                   />
@@ -213,26 +257,25 @@ const Scoring = ({navigation}) => {
                     )}
                   />
                 </View>
-                <View style={styles.buttonContainer}>
-                  <View style={styles.buttoncancel}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        handleCheck(selecTId);
-                      }}>
-                      <Text style={styles.save}>Save</Text>
-                    </TouchableOpacity>
+                {selectFilter === 'Filter' && (
+                  <View style={styles.buttonContainer}>
+                    <View style={styles.buttoncancel}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleCheck(selecTId);
+                        }}>
+                        <Text style={styles.save}>Save</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
+                )}
               </View>
             </View>
           </View>
         </Modal>
         {/* EndPopup */}
 
-        {/* sort */}
-
         {/* Content */}
-        {/* <ScrollView> kalo udah make flatlist ga perlu scrollview bang */}
         <View style={{flex: 1}}>
           <FlatList
             ListHeaderComponent={Menutab}
@@ -251,39 +294,9 @@ const Scoring = ({navigation}) => {
             )}
           />
         </View>
-
-        {/* </ScrollView> */}
       </View>
     </NativeBaseProvider>
   );
 };
 
 export default Scoring;
-
-// let selected = data.filter(filter => filter.isChecked);
-// //   const [checked2, setChecked2] = useState(false);
-// //   const [checked3, setChecked3] = useState(false);
-// //   const [checked4, setChecked4] = useState(false);
-// {
-//   /* Filter */
-// }
-//   <View style={styles.filter}>
-//   <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-//     <FilterFeature
-//       filter="Sort"
-//       icon={require('../../../assets/icon/Sort.png')}
-//     />
-
-//     <FilterFeature
-//       filter="Filter"
-//       icon={require('../../../assets/icon/Filter.png')}
-//       onPress={() => setModalVisible(true)}
-//     />
-//     <FilterFeature filter="All" />
-//     <FilterFeature filter="Theme 1" />
-//     <FilterFeature filter="Theme 2" />
-//     <FilterFeature filter="Theme 3" />
-//     <FilterFeature filter="Theme 4" />
-//     <FilterFeature filter="Theme 5" />
-//   </ScrollView>
-// </View>

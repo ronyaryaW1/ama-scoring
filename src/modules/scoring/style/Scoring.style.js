@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    marginTop: 10,
+    marginTop: 8,
   },
   inputContainer: {
     paddingHorizontal: 20,
