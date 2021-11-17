@@ -28,6 +28,12 @@ const Home = ({navigation}) => {
       ...AuthConfig,
     });
   }, []);
+  let datax;
+  datax = dataJson;
+
+  // datax = selectedId
+  //   ? dataJson.filter(x => x.category === filterJson[setSelectedId])
+  //   : dataJson;
   console.log('ini data: ', data);
 
   const Item = ({
@@ -42,9 +48,7 @@ const Home = ({navigation}) => {
       disabled={disabled}
       onPress={onPress}
       style={[backgroundColor, styles.filterContainer]}>
-      <Text style={[styles.textFilter, textColor]}>
-        {item?.title || titles}
-      </Text>
+      <Text style={[styles.textFilter, textColor]}>{item?.title}</Text>
     </TouchableOpacity>
   );
 
@@ -188,17 +192,7 @@ const Home = ({navigation}) => {
             </View>
             {/* content top score */}
             <View style={{marginTop: 24, marginBottom: 12}}>
-              {dataJson.map(x => {
-                console.log('cxcx', dataJson[0]);
-                // let backgroundColor;
-                // if (dataJson[0]) {
-                //   backgroundColor = '#FFD700';
-                // } else if (dataJson[1]) {
-                //   backgroundColor = 'grey';
-                // } else if (dataJson[2]) {
-                //   backgroundColor = '#D89A5D';
-                // }
-
+              {datax.map(x => {
                 return (
                   <View style={styles.containetScoreContent}>
                     <View

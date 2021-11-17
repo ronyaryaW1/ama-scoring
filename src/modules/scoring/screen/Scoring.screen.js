@@ -20,6 +20,7 @@ import CheckBox from 'react-native-check-box';
 import {FlatList} from 'react-native-gesture-handler';
 import FilterItem from '../../../components/FilterItem';
 import {Checkbox, NativeBaseProvider} from 'native-base';
+import {useFocusEffect} from '@react-navigation/core';
 
 const Scoring = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,51 +33,66 @@ const Scoring = ({navigation}) => {
   const Filter = require('../../../assets/icon/Filter.png');
   const SortJson = require('../json/sort.json');
   const [selecTId, setSelectedId] = useState();
-  console.log('isSelect', selecTId);
+  const [selectFilter, setSelectFilter] = useState();
+  console.log('isSelect', selectFilter);
 
-  // filter
   const [content, setContent] = useState(getContent);
-  // const newData =
-  //   selecTId !== 'All' ? content.filter(x => x.theme === selecTId) : content;
-  // useEffect(() => {
-  //   selecTId !== undefined ? setContent(newData) : setContent(getContent);
-  // }, [selecTId]);
-
-  // console.log('newData', newData);
-  // const handleCheck = () => {
-  //   content.filter(item => {
-  //     item.theme;
-  //   });
-  //   data.filter(item => {
-  //     item.title;
-  //     console.log(item.title);
-  //   });
-  //   setModalVisible(false);
-  // };
-  let newData;
   const handleCheck = () => {
-    newData =
-      selecTId !== 'All' ? content.filter(x => x.theme === selecTId) : content;
-    setContent(newData);
+    content.filter(item => {
+      item.theme;
+    });
+    data.filter(item => {
+      item.title;
+      console.log(item.title);
+    });
     setModalVisible(false);
   };
+  const newContent = getContent.filter(x => x.theme === selecTId);
+  console.log(
+    'content',
+    getContent.filter(x => x.theme === selectFilter),
+  );
 
   const onPressSort = () => {
-    setSelectedId('Sort');
+    setSelectFilter('Sort');
     setModalVisible(true);
   };
   const onPressFIlter = () => {
-    setSelectedId('Filter');
+    setSelectFilter('Filter');
     setModalVisible(true);
   };
 
+  let datas;
+  if (selecTId === 'All') {
+    datas = content;
+  } else if (selecTId === 'Filter') {
+    datas = content;
+  } else if (selecTId === 'Sort') {
+    datas = content;
+  } else {
+    datas = newContent;
+  }
+
+  // console.log('datasssss', datas);
+
+  const ListEmprtyData = () => (
+    <View
+      style={{
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop: '80%',
+      }}>
+      <Text>Tidak Ada Data</Text>
+    </View>
+  );
   let selected = data.filter(filter => filter.checked);
   const MenuBar = ({onPress, title}) => {
     return (
       <TouchableOpacity
         onPress={onPress}
         style={{
-          backgroundColor: title === selecTId ? '#085D7A' : 'white',
+          backgroundColor:
+            title === selecTId || title === selectFilter ? '#085D7A' : 'white',
           borderColor: '#231F20',
           borderWidth: 0.5,
           borderRadius: 8,
@@ -98,7 +114,11 @@ const Scoring = ({navigation}) => {
               <Image source={Filter} style={{width: 16, height: 16}} />
             </View>
           )}
-          <Text style={{color: title === selecTId ? 'white' : 'grey'}}>
+          <Text
+            style={{
+              color:
+                title === selecTId || title === selectFilter ? 'white' : 'grey',
+            }}>
             {title}
           </Text>
         </View>
@@ -162,17 +182,17 @@ const Scoring = ({navigation}) => {
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
                   <Text style={styles.textTitle}>
-                    {selecTId === 'Sort ' ? 'Filter' : 'Sort'}
+                    {selectFilter === 'Filter' ? 'Filter' : 'Sort'}
                   </Text>
                   {}
-                  <TouchableOpacity onPress={() => setSelectedId()}>
+                  <TouchableOpacity onPress={() => setSelectFilter()}>
                     <Text style={styles.textReset}>Reset Filter</Text>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.textTitle}>Theme</Text>
                   <FlatList
-                    data={selecTId === 'filter' ? data : SortJson}
+                    data={selectFilter === 'Filter' ? data : SortJson}
                     renderItem={({item, index}) => (
                       <View key={index} style={styles.contentContainer}>
                         <Text style={styles.textContent}>{item.title}</Text>
@@ -213,21 +233,24 @@ const Scoring = ({navigation}) => {
 
         {/* Content */}
         {/* <ScrollView> kalo udah make flatlist ga perlu scrollview bang */}
-        <FlatList
-          ListHeaderComponent={Menutab}
-          data={content}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('InnovationTabs')}>
-              <CardScoring
-                content={item.title}
-                title={item.desc}
-                filter={item.theme}
-                category={item.category}
-              />
-            </TouchableOpacity>
-          )}
-        />
+        <View style={{flex: 1}}>
+          <FlatList
+            ListHeaderComponent={Menutab}
+            ListEmptyComponent={ListEmprtyData}
+            data={selecTId ? datas : content}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('InnovationTabs')}>
+                <CardScoring
+                  content={item.title}
+                  title={item.desc}
+                  filter={item.theme}
+                  category={item.category}
+                />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
 
         {/* </ScrollView> */}
       </View>
