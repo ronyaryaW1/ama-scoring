@@ -1,0 +1,44 @@
+[
+    {
+    "id": 1,
+    "title": "Instalasi Pengolah Limbah untuk Biogas, Pupuk Cair dan Pakan Ternak",
+    "desc": "Tactic Goals",
+    "theme" : "Agricultural Technology",
+    "category" : "Category 2"
+    },
+    {
+    "id": 2,
+    "title": "Instalasi Pengolah Kotoran Sapi Menjadi Energi Biogas",
+    "desc": "IdeaPing",
+    "theme" : "Medical Technology",
+    "category" : "Category 2"
+    },
+    {
+    "id": 3,
+    "title": "Custom cancer vaccines",
+    "desc": "MedIdea",
+    "theme" : "Agricultural Technology",
+    "category" : "Category 2"
+    },
+    {
+    "id": 4,
+    "title": "Instalasi Pengolah Limbah untuk Biogas, Pupuk Cair dan Pakan Ternak",
+    "desc": "Tacteam",
+    "theme" : "Theme 3",
+    "category" : "Category 2"
+    },
+    {
+    "id": 5,
+    "title": "Instalasi Listrik Berbahan Limbah Plastik",
+    "desc": "BaritoDig",
+    "theme" : "Theme 4",
+    "category" : "Category 2"
+    },
+    {
+    "id": 6,
+    "title": "Kita Coba",
+    "desc": "BaritoDig",
+    "theme" : "Theme 3",
+    "category" : "Category 2"
+    }
+]
