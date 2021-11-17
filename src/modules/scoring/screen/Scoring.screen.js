@@ -28,6 +28,9 @@ const Scoring = ({navigation}) => {
   const getData = require('../json/filter.json');
   const getContent = require('../json/data');
   const [data, setData] = useState(getData);
+  const filterActive = require('../../../assets/icon/filterActive.png');
+  const SortActive = require('../../../assets/icon/sortActive.png');
+
   // const [isOpen, setisOpen] = React.useState(false);
   // const [check, setCheck] = useState(false);
   const Sort = require('../../../assets/icon/Sort.png');
@@ -69,10 +72,11 @@ const Scoring = ({navigation}) => {
   } else {
     datas = newContent;
   }
-
   const menuSort = SortJson.find(x => x.title === selecTId);
-  const sort = _.orderBy(content, [menuSort.comparator], [menuSort.order]);
-  datas = sort;
+  const sort = _.orderBy(content, [menuSort?.comparator], [menuSort?.order]);
+  if (menuSort !== undefined) {
+    datas = sort;
+  }
   const ListEmprtyData = () => (
     <View
       style={{
@@ -91,9 +95,9 @@ const Scoring = ({navigation}) => {
         style={{
           backgroundColor:
             title === selecTId || title === selectFilter ? '#085D7A' : 'white',
-          borderColor: '#231F20',
+          borderColor: 'grey',
           borderWidth: 0.5,
-          borderRadius: 8,
+          borderRadius: 20,
           marginHorizontal: 12,
         }}>
         <View
@@ -104,12 +108,18 @@ const Scoring = ({navigation}) => {
           }}>
           {title === 'Sort' && (
             <View style={{justifyContent: 'center', marginRight: 8}}>
-              <Image source={Sort} style={{width: 16, height: 16}} />
+              <Image
+                source={title === selectFilter ? SortActive : Sort}
+                style={{width: 16, height: 16}}
+              />
             </View>
           )}
           {title === 'Filter' && (
             <View style={{justifyContent: 'center', marginRight: 8}}>
-              <Image source={Filter} style={{width: 16, height: 16}} />
+              <Image
+                source={title === selectFilter ? filterActive : Filter}
+                style={{width: 16, height: 16}}
+              />
             </View>
           )}
           <Text
