@@ -30,12 +30,21 @@ const styles = StyleSheet.create({
   box: {
     margin: 10,
     backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    borderWidth: 0.2,
+    borderRadius: 8,
+    borderWidth: 0.5,
     borderColor: '#085D7A',
     height: '15%',
     padding: 10,
     flex: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   textDec: {
     fontSize: 14,
