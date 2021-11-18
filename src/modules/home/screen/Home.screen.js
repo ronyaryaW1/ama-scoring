@@ -15,6 +15,7 @@ import getData from '../../../components/GetData';
 import {AuthConfig, defaultAuthState} from '../../../config/Auth.cfg';
 import filterJson from './json/filter.json';
 import dataJson from './json/data.json';
+import _ from 'lodash';
 // import FilterItem from '../../../components/FilterItem';
 
 const Home = ({navigation}) => {
@@ -31,9 +32,6 @@ const Home = ({navigation}) => {
   let datax;
   datax = dataJson;
 
-  // datax = selectedId
-  //   ? dataJson.filter(x => x.category === filterJson[setSelectedId])
-  //   : dataJson;
   console.log('ini data: ', data);
 
   const Item = ({
@@ -190,9 +188,38 @@ const Home = ({navigation}) => {
               />
               {/* <FilterItem data={filterJson} /> */}
             </View>
+
             {/* content top score */}
             <View style={{marginTop: 24, marginBottom: 12}}>
-              {datax.map(x => {
+              {datax.map((x, i) => {
+                console.log('datax', i);
+                let backgroundColor;
+                let borderCOlor;
+                let fontCOlor;
+                switch (i) {
+                  case 0:
+                    backgroundColor = '#FFD700';
+                    borderCOlor = '#FFD700';
+                    fontCOlor = '#FFFFFF';
+                    break;
+                  case 1:
+                    backgroundColor = 'grey';
+                    borderCOlor = 'grey';
+                    fontCOlor = '#FFFFFF';
+
+                    break;
+                  case 2:
+                    backgroundColor = '#DA9F65';
+                    borderCOlor = '#DA9F65';
+                    fontCOlor = '#FFFFFF';
+
+                    break;
+                  default:
+                    borderCOlor = 'grey';
+                    fontCOlor = '#7B7979';
+
+                    break;
+                }
                 return (
                   <View style={styles.containetScoreContent}>
                     <View
@@ -203,10 +230,12 @@ const Home = ({navigation}) => {
                         borderRadius: 30,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: '#FFD700',
+                        backgroundColor: backgroundColor,
                         marginHorizontal: 12,
+                        borderColor: borderCOlor,
+                        borderWidth: 0.5,
                       }}>
-                      <Text style={{color: '#fff'}}>{x.id}</Text>
+                      <Text style={{color: fontCOlor}}>{x.id}</Text>
                     </View>
                     <View>
                       <View style={{width: 272}}>

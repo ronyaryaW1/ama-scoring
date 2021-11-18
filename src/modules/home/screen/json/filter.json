@@ -1,7 +1,9 @@
 [
   {
       "id": 1,
-      "title": "Top 10"
+      "title": "Top 10",
+      "comparator": "value",
+      "order":"desc"
   },
   {
       "id": 2,

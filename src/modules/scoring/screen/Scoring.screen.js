@@ -174,7 +174,7 @@ const Scoring = ({navigation}) => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={modalVisible}
+          visible={selectFilter !== undefined && modalVisible}
           onRequestClose={() => {
             Alert.alert('Modal has been closed.');
             setModalVisible(!modalVisible);
@@ -190,7 +190,9 @@ const Scoring = ({navigation}) => {
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
                   <Text style={styles.textTitle}>
-                    {selectFilter === 'Filter' ? 'Filter' : 'Sort'}
+                    {selectFilter === 'Filter'
+                      ? 'Filter'
+                      : selectFilter === 'Sort' && 'Sort By'}
                   </Text>
                   {selectFilter === 'Filter' && (
                     <TouchableOpacity onPress={() => setSelectFilter()}>
@@ -207,7 +209,7 @@ const Scoring = ({navigation}) => {
                     renderItem={({item, index}) => (
                       <View key={index}>
                         {/* filter fitur */}
-                        {selectFilter === 'Filter' ? (
+                        {selectFilter === 'Filter' && (
                           <View style={styles.contentContainer}>
                             <Text style={styles.textContent}>{item.title}</Text>
                             <Checkbox
@@ -216,8 +218,8 @@ const Scoring = ({navigation}) => {
                               onPress={() => setSelectedId(item.title)}
                             />
                           </View>
-                        ) : (
-                          // sort fitur
+                        )}
+                        {selectFilter === 'Sort' && (
                           <View style={styles.contentContainer}>
                             <View>
                               <Text style={styles.textContent}>
