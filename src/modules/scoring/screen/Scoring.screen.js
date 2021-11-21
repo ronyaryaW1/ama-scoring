@@ -14,31 +14,26 @@ import {
 } from 'react-native';
 
 import CardScoring from '../../../components/CardScoring';
-// import {FilterFeature} from '../../../components/FilterFeature';
-// import CheckBox from 'react-native-check-box';
-// import {CheckBox} from 'react-native-elements';
 import {FlatList} from 'react-native-gesture-handler';
-// import FilterItem from '../../../components/FilterItem';
 import {Checkbox, NativeBaseProvider} from 'native-base';
 import _ from 'lodash';
-// import {useFocusEffect} from '@react-navigation/core';
 
-const Scoring = ({navigation}) => {
+const Scoring = props => {
+  console.log('route', props?.route?.params?.route);
+  const {navigation, route} = props;
   const [modalVisible, setModalVisible] = useState(false);
   const getData = require('../json/filter.json');
   const getContent = require('../json/data');
   const [data, setData] = useState(getData);
   const filterActive = require('../../../assets/icon/filterActive.png');
   const SortActive = require('../../../assets/icon/sortActive.png');
-
-  // const [isOpen, setisOpen] = React.useState(false);
-  // const [check, setCheck] = useState(false);
   const Sort = require('../../../assets/icon/Sort.png');
   const Filter = require('../../../assets/icon/Filter.png');
   const SortJson = require('../json/sort.json');
   const [selecTId, setSelectedId] = useState();
   const [selectFilter, setSelectFilter] = useState();
-  console.log('isSelect', selectFilter);
+  const isCompare = props?.route?.params?.route === 'compare';
+  console.log('isSelect', isCompare);
 
   const [content, setContent] = useState(getContent);
   const handleCheck = () => {
@@ -60,6 +55,11 @@ const Scoring = ({navigation}) => {
   const onPressFIlter = () => {
     setSelectFilter('Filter');
     setModalVisible(true);
+  };
+
+  const onRsetFilter = () => {
+    setSelectFilter();
+    setSelectedId();
   };
 
   let datas;
@@ -137,7 +137,7 @@ const Scoring = ({navigation}) => {
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={styles.scrollMenu}>
+      style={{marginTop: 5}}>
       <MenuBar title="Sort" onPress={() => onPressSort()} />
       <MenuBar title="Filter" onPress={() => onPressFIlter()} />
       <MenuBar title="All" onPress={() => setSelectedId('All')} />
@@ -151,6 +151,11 @@ const Scoring = ({navigation}) => {
       />
     </ScrollView>
   );
+  const [groupValue, setGroupValue] = React.useState([
+    'Photography',
+    'Gardening',
+  ]);
+  console.log('groupValue', groupValue);
   return (
     <NativeBaseProvider>
       <View style={styles.container}>
@@ -163,7 +168,7 @@ const Scoring = ({navigation}) => {
                 style={styles.imageBack}
               />
             </TouchableOpacity>
-            <Text style={styles.name}>Scoring</Text>
+            <Text style={styles.name}>{isCompare ? 'Compare' : 'Scoring'}</Text>
           </View>
           <Image
             source={require('../../../assets/icon/search.png')}
@@ -195,7 +200,7 @@ const Scoring = ({navigation}) => {
                       : selectFilter === 'Sort' && 'Sort By'}
                   </Text>
                   {selectFilter === 'Filter' && (
-                    <TouchableOpacity onPress={() => setSelectFilter()}>
+                    <TouchableOpacity onPress={() => onRsetFilter()}>
                       <Text style={styles.textReset}>Reset Filter</Text>
                     </TouchableOpacity>
                   )}
@@ -212,11 +217,16 @@ const Scoring = ({navigation}) => {
                         {selectFilter === 'Filter' && (
                           <View style={styles.contentContainer}>
                             <Text style={styles.textContent}>{item.title}</Text>
-                            <Checkbox
-                              value={item.title}
-                              accessibilityLabel="menu-filter"
-                              onPress={() => setSelectedId(item.title)}
-                            />
+                            <Checkbox.Group
+                              onChange={values => {
+                                setGroupValue(values || []);
+                              }}>
+                              <Checkbox
+                                value={item.title}
+                                accessibilityLabel="menu-filter"
+                                onPress={() => setSelectedId(item.title)}
+                              />
+                            </Checkbox.Group>
                           </View>
                         )}
                         {selectFilter === 'Sort' && (
@@ -293,18 +303,59 @@ const Scoring = ({navigation}) => {
             ListHeaderComponent={Menutab}
             ListEmptyComponent={ListEmprtyData}
             data={selecTId ? datas : content}
-            renderItem={({item}) => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate('InnovationTabs')}>
-                <CardScoring
-                  content={item.title}
-                  title={item.desc}
-                  filter={item.theme}
-                  category={item.category}
-                />
-              </TouchableOpacity>
-            )}
+            renderItem={({item}) =>
+              isCompare === true ? (
+                <CardScoring data={item} route={route?.params?.route} />
+              ) : (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('InnovationTabs')}>
+                  <CardScoring data={item} route={route?.params?.route} />
+                </TouchableOpacity>
+              )
+            }
           />
+          {isCompare && (
+            <View>
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  height: 55,
+                  justifyContent: 'space-between',
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  backgroundColor: '#FFFF',
+                }}>
+                <View>
+                  <Text
+                    style={{
+                      color: '#231F20',
+                      fontWeight: 'bold',
+                      fontSize: 14,
+                    }}>
+                    0
+                  </Text>
+                </View>
+                <View>
+                  <Text style={{color: '#231F20', fontSize: 14}}>
+                    Ideas have been selected
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Compare')}
+                  style={{
+                    backgroundColor: '#CDCDCD',
+                    width: 122,
+                    height: 32,
+                    borderRadius: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Text style={{fontWeight: '100'}}>Compare 0 Ideas</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </View>
       </View>
     </NativeBaseProvider>

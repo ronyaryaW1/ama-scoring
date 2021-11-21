@@ -1,23 +1,63 @@
-import React from 'react';
+/* eslint-disable react-native/no-inline-styles */
+// import {Checkbox, CheckIcon} from 'native-base';
+import CheckBox from '@react-native-community/checkbox';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const CardScoring = props => {
+const CardScoring = ({data, route}) => {
+  const [value, setValue] = React.useState([]);
+  const [cek, setCek] = useState(false);
+  console.log('toggleCheckBox', value.isChecked, value.desc);
+  console.log('value', value);
+
+  const onChangeVelue = (itemSelected, index) => {
+    setCek(!cek);
+    const _data = [data];
+    const dataSelect = _data.find(x => x.desc === itemSelected);
+    if (dataSelect) {
+      dataSelect.isChecked = true;
+    }
+    const newData = _data.filter(x => x.isChecked);
+    setValue(newData);
+    // if (dataSelect.isChecked === true) {
+    // }
+  };
+
   return (
-    <View style={styles.box}>
-      <Text style={styles.content}>{props.content}</Text>
-      <Text style={styles.textDec}>{props.title}</Text>
-      <View style={{flexDirection: 'row'}}>
-        <View style={styles.boxFilter}>
-          <Text
-            style={[styles.title, {paddingVertical: 5, paddingHorizontal: 10}]}>
-            {props.filter}
-          </Text>
-        </View>
-        <View style={styles.boxFilter}>
-          <Text
-            style={[styles.title, {paddingVertical: 5, paddingHorizontal: 10}]}>
-            {props.category}
-          </Text>
+    <View style={[styles.box, {flexDirection: 'row'}]}>
+      {route === 'compare' && (
+        <CheckBox
+          // value={[data].filter(x => x.isChecked)}
+          disabled={false}
+          boxType="square"
+          offAnimationType="fade"
+          onAnimationType="fill"
+          onChange={() => onChangeVelue(data.desc, data.id)}
+        />
+      )}
+      <View>
+        <Text style={styles.content}>{data.title}</Text>
+        <Text style={styles.textDec}>{data.desc}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.boxFilter}>
+            <Text
+              style={[
+                styles.title,
+                {paddingVertical: 5, paddingHorizontal: 10},
+              ]}>
+              {data.theme}
+            </Text>
+          </View>
+          <View style={styles.boxFilter}>
+            <Text
+              style={[
+                styles.title,
+                {paddingVertical: 5, paddingHorizontal: 10},
+              ]}>
+              {data.category}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -52,6 +92,16 @@ const styles = StyleSheet.create({
     paddingTop: 1,
     paddingBottom: 12,
   },
+  checbox: {
+    width: 14,
+    height: 14,
+    marginTop: 45,
+    borderRadius: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+    // zIndex: 10,
+  },
   boxFilter: {
     flexDirection: 'row',
     marginVertical: 10,
@@ -71,3 +121,18 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
+{
+  /* <TouchableOpacity
+onPress={() => {
+  setIsChecked(!isChecked);
+}}
+style={[
+  styles.checbox,
+  {
+    borderColor: isChecked ? '#085D7A' : '#231F20',
+    borderWidth: 0.5,
+  },
+]}>
+{isChecked && <CheckIcon size="3" color="#085D7A" />}
+</TouchableOpacity> */
+}

@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     width: '100%',
     shadowOpacity: 1,
     backgroundColor: 'white',
-    marginBottom: 5,
+    // marginBottom: 5,
     elevation: 3,
   },
   profileContainer: {

@@ -16,7 +16,6 @@ import {AuthConfig, defaultAuthState} from '../../../config/Auth.cfg';
 import filterJson from './json/filter.json';
 import dataJson from './json/data.json';
 import _ from 'lodash';
-// import FilterItem from '../../../components/FilterItem';
 
 const Home = ({navigation}) => {
   const [data, setData] = useState(defaultAuthState);
@@ -170,7 +169,12 @@ const Home = ({navigation}) => {
               <Text style={styles.h2}>Ideas need scoring</Text>
             </View>
             <View style={styles.actionContainer}>
-              <Text style={styles.h3}>Klik and See details</Text>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Scoring', {route: 'compare'})
+                }>
+                <Text style={styles.h3}>Klik and See details</Text>
+              </TouchableOpacity>
             </View>
           </LinearGradient>
           {/* Top Scores */}

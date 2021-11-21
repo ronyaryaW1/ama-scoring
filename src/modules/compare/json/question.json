@@ -1,0 +1,15 @@
+[
+    {
+        "no": 1,
+        "question": "Jika Anda menjadi costumer, seberapa pentingkah masalah ini?"
+    },
+    {
+        "no": 2,
+        "question": "Seberapa tepat solusi yang ditawarkan untuk mengatasi permasalahan yang ada?"
+    },
+    {
+        "no": 3,
+        "question": "Dalam menjawab masalah yang ada, seberapa paham founder dalam hal ini?"
+    }
+ 
+]

@@ -7,6 +7,7 @@ import Main from '../modules/main/screen/Main.screen';
 import Home from '../modules/home/screen/Home.screen';
 import Scoring from '../modules/scoring/screen/Scoring.screen';
 import innovationTabs from '../modules/inovation/screen/InnovationTabs';
+import Compare from '../modules/compare/screen/Compare.screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,11 @@ const Routes = () => {
       <Stack.Screen
         name="Scoring"
         component={Scoring}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Compare"
+        component={Compare}
         options={{headerShown: false}}
       />
       <Stack.Screen
