@@ -21,8 +21,29 @@ const CardScoring = ({data, route}) => {
     setValue(newData);
   };
 
+  let backgroundColor;
+  switch (data?.status) {
+    case 'Draft':
+      backgroundColor = '#F9CC2C';
+      break;
+    case 'Submitted':
+      backgroundColor = '#9ADFB1';
+      break;
+    default:
+      backgroundColor = '#9ADFB1';
+      break;
+  }
+
   return (
-    <View style={[styles.box, {flexDirection: 'row'}]}>
+    <View
+      style={[
+        styles.box,
+        {
+          flexDirection: 'row',
+          paddingVertical: route === 'compare' ? 8 : 10,
+          paddingHorizontal: route === 'compare' ? 0 : 10,
+        },
+      ]}>
       {route === 'compare' && (
         <View style={{paddingVertical: 43}}>
           <CheckBox
@@ -38,7 +59,7 @@ const CardScoring = ({data, route}) => {
       <View style={{width: 272}}>
         <Text style={styles.content}>{data.title}</Text>
         <Text style={styles.textDec}>{data.desc}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <View style={styles.boxFilter}>
             <Text
               style={[
@@ -57,6 +78,18 @@ const CardScoring = ({data, route}) => {
               {data.category}
             </Text>
           </View>
+          {route === 'compare' && (
+            <View style={{backgroundColor: backgroundColor, borderRadius: 20}}>
+              <Text
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  color: 'white',
+                }}>
+                {data.status}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -67,13 +100,13 @@ export default CardScoring;
 
 const styles = StyleSheet.create({
   box: {
-    margin: 10,
+    margin: 8,
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     // borderWidth: 0.1,
     borderColor: '#085D7A',
     height: '15%',
-    padding: 10,
+    // width: '98%',
     flex: 1,
     shadowColor: '#000',
     shadowOffset: {
