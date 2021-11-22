@@ -32,11 +32,13 @@ const Scoring = props => {
   const SortJson = require('../json/sort.json');
   const [selecTId, setSelectedId] = useState();
   const [selectFilter, setSelectFilter] = useState();
+  const [filterSelect, setFilterSelect] = useState(false);
   const isCompare = props?.route?.params?.route === 'compare';
-  console.log('isSelect', isCompare);
+  console.log('isSelect', filterSelect);
 
   const [content, setContent] = useState(getContent);
   const handleChange = id => {
+    setFilterSelect(true);
     let temp = data.map(product => {
       if (id === product.id) {
         return {...product, isChecked: !product.isChecked};
@@ -47,13 +49,19 @@ const Scoring = props => {
   };
   let selectedFilter = data.filter(product => product.isChecked);
 
-  const newContent = getContent.filter(
-    x =>
-      x.theme === selectedFilter[0]?.title ||
-      x.theme === selectedFilter[1]?.title ||
-      x.theme === selectedFilter[2]?.title ||
-      x.theme === selectedFilter[3]?.title,
-  );
+  let newContent;
+
+  if (filterSelect === true) {
+    newContent = getContent.filter(
+      x =>
+        x.theme === selectedFilter[0]?.title ||
+        x.theme === selectedFilter[1]?.title ||
+        x.theme === selectedFilter[2]?.title ||
+        x.theme === selectedFilter[3]?.title,
+    );
+  } else {
+    newContent = getContent.filter(x => x.theme === selecTId);
+  }
 
   const onPressSort = () => {
     setSelectFilter('Sort');
