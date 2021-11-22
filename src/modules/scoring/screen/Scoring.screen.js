@@ -36,17 +36,24 @@ const Scoring = props => {
   console.log('isSelect', isCompare);
 
   const [content, setContent] = useState(getContent);
-  const handleCheck = () => {
-    content.filter(item => {
-      item.theme;
+  const handleChange = id => {
+    let temp = data.map(product => {
+      if (id === product.id) {
+        return {...product, isChecked: !product.isChecked};
+      }
+      return product;
     });
-    data.filter(item => {
-      item.title;
-      console.log(item.title);
-    });
-    setModalVisible(false);
+    setData(temp);
   };
-  const newContent = getContent.filter(x => x.theme === selecTId);
+  let selectedFilter = data.filter(product => product.isChecked);
+
+  const newContent = getContent.filter(
+    x =>
+      x.theme === selectedFilter[0]?.title ||
+      x.theme === selectedFilter[1]?.title ||
+      x.theme === selectedFilter[2]?.title ||
+      x.theme === selectedFilter[3]?.title,
+  );
 
   const onPressSort = () => {
     setSelectFilter('Sort');
@@ -155,7 +162,7 @@ const Scoring = props => {
     'Photography',
     'Gardening',
   ]);
-  console.log('groupValue', groupValue);
+  // console.log('groupValue', groupValue);
   return (
     <NativeBaseProvider>
       <View style={styles.container}>
@@ -225,6 +232,9 @@ const Scoring = props => {
                                 value={item.title}
                                 accessibilityLabel="menu-filter"
                                 onPress={() => setSelectedId(item.title)}
+                                onChange={() => {
+                                  handleChange(item.id);
+                                }}
                               />
                             </Checkbox.Group>
                           </View>
@@ -284,7 +294,7 @@ const Scoring = props => {
                     <View style={styles.buttoncancel}>
                       <TouchableOpacity
                         onPress={() => {
-                          handleCheck(selecTId);
+                          setModalVisible(false);
                         }}>
                         <Text style={styles.save}>Save</Text>
                       </TouchableOpacity>
