@@ -121,18 +121,3 @@ const styles = StyleSheet.create({
     color: 'white',
   },
 });
-{
-  /* <TouchableOpacity
-onPress={() => {
-  setIsChecked(!isChecked);
-}}
-style={[
-  styles.checbox,
-  {
-    borderColor: isChecked ? '#085D7A' : '#231F20',
-    borderWidth: 0.5,
-  },
-]}>
-{isChecked && <CheckIcon size="3" color="#085D7A" />}
-</TouchableOpacity> */
-}

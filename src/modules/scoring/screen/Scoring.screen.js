@@ -25,10 +25,10 @@ const Scoring = props => {
   const getData = require('../json/filter.json');
   const getContent = require('../json/data');
   const [data, setData] = useState(getData);
-  const filterActive = require('../../../assets/icon/filterActive.png');
-  const SortActive = require('../../../assets/icon/sortActive.png');
-  const Sort = require('../../../assets/icon/Sort.png');
-  const Filter = require('../../../assets/icon/Filter.png');
+  // const filterActive = require('../../../assets/icon/filterActive.png');
+  // const SortActive = require('../../../assets/icon/sortActive.png');
+  // const Sort = require('../../../assets/icon/Sort.png');
+  // const Filter = require('../../../assets/icon/Filter.png');
   const SortJson = require('../json/sort.json');
   const [selecTId, setSelectedId] = useState();
   const [selectFilter, setSelectFilter] = useState();
@@ -124,7 +124,11 @@ const Scoring = props => {
           {title === 'Sort' && (
             <View style={{justifyContent: 'center', marginRight: 8}}>
               <Image
-                source={title === selectFilter ? SortActive : Sort}
+                source={
+                  title === selectFilter
+                    ? require('../../../assets/icon/sortActive.png')
+                    : require('../../../assets/icon/Sort.png')
+                }
                 style={{width: 16, height: 16}}
               />
             </View>
@@ -132,7 +136,11 @@ const Scoring = props => {
           {title === 'Filter' && (
             <View style={{justifyContent: 'center', marginRight: 8}}>
               <Image
-                source={title === selectFilter ? filterActive : Filter}
+                source={
+                  title === selectFilter
+                    ? require('../../../assets/icon/filterActive.png')
+                    : require('../../../assets/icon/Filter.png')
+                }
                 style={{width: 16, height: 16}}
               />
             </View>
@@ -166,11 +174,6 @@ const Scoring = props => {
       />
     </ScrollView>
   );
-  const [groupValue, setGroupValue] = React.useState([
-    'Photography',
-    'Gardening',
-  ]);
-  // console.log('groupValue', groupValue);
   return (
     <NativeBaseProvider>
       <View style={styles.container}>
@@ -232,10 +235,7 @@ const Scoring = props => {
                         {selectFilter === 'Filter' && (
                           <View style={styles.contentContainer}>
                             <Text style={styles.textContent}>{item.title}</Text>
-                            <Checkbox.Group
-                              onChange={values => {
-                                setGroupValue(values || []);
-                              }}>
+                            <Checkbox.Group>
                               <Checkbox
                                 value={item.title}
                                 accessibilityLabel="menu-filter"
