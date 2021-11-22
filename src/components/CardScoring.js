@@ -1,9 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 // import {Checkbox, CheckIcon} from 'native-base';
 import CheckBox from '@react-native-community/checkbox';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const CardScoring = ({data, route}) => {
   const [value, setValue] = React.useState([]);
@@ -20,23 +19,23 @@ const CardScoring = ({data, route}) => {
     }
     const newData = _data.filter(x => x.isChecked);
     setValue(newData);
-    // if (dataSelect.isChecked === true) {
-    // }
   };
 
   return (
     <View style={[styles.box, {flexDirection: 'row'}]}>
       {route === 'compare' && (
-        <CheckBox
-          // value={[data].filter(x => x.isChecked)}
-          disabled={false}
-          boxType="square"
-          offAnimationType="fade"
-          onAnimationType="fill"
-          onChange={() => onChangeVelue(data.desc, data.id)}
-        />
+        <View style={{paddingVertical: 43}}>
+          <CheckBox
+            // value={[data].filter(x => x.isChecked)}
+            disabled={false}
+            boxType="square"
+            offAnimationType="fade"
+            onAnimationType="fill"
+            onChange={() => onChangeVelue(data.desc, data.id)}
+          />
+        </View>
       )}
-      <View>
+      <View style={{width: 272}}>
         <Text style={styles.content}>{data.title}</Text>
         <Text style={styles.textDec}>{data.desc}</Text>
         <View style={{flexDirection: 'row'}}>
