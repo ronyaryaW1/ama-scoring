@@ -1,24 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
 // import {Checkbox, CheckIcon} from 'native-base';
-import CheckBox from '@react-native-community/checkbox';
+
+import {Checkbox} from 'native-base';
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
 const CardScoring = ({data, route}) => {
-  const [value, setValue] = React.useState([]);
-  const [cek, setCek] = useState(false);
-  console.log('toggleCheckBox', value.isChecked, value.desc);
-  console.log('value', value);
+  const dataArray = require('../modules/scoring/json/data.json');
+  const [dataFilter, setFilter] = useState(dataArray);
 
-  const onChangeVelue = (itemSelected, index) => {
-    setCek(!cek);
-    const _data = [data];
-    const dataSelect = _data.find(x => x.desc === itemSelected);
-    if (dataSelect) {
-      dataSelect.isChecked = true;
-    }
-    const newData = _data.filter(x => x.isChecked);
-    setValue(newData);
+  const handleChange = id => {
+    console.log('idddddddddd', id);
+    let temp = dataFilter?.map(product => {
+      console.log('datafilter', product);
+      if (id === product.id) {
+        console.log('productId');
+        return {...product, isChecked: !product.isChecked};
+      }
+      return product;
+    });
+    const tempIsChecked = temp.filter(x => x.isChecked);
+    console.log('themea', temp);
+    console.log('tempIsChecked', tempIsChecked);
+    setFilter(temp);
   };
 
   let backgroundColor;
@@ -41,18 +45,18 @@ const CardScoring = ({data, route}) => {
         {
           flexDirection: 'row',
           paddingVertical: route === 'compare' ? 8 : 10,
-          paddingHorizontal: route === 'compare' ? 0 : 10,
+          paddingHorizontal: route === 'compare' ? 0 : 16,
         },
       ]}>
       {route === 'compare' && (
-        <View style={{paddingVertical: 43}}>
-          <CheckBox
-            // value={[data].filter(x => x.isChecked)}
-            disabled={false}
-            boxType="square"
-            offAnimationType="fade"
-            onAnimationType="fill"
-            onChange={() => onChangeVelue(data.desc, data.id)}
+        <View style={{paddingVertical: 43, paddingHorizontal: 8}}>
+          <Checkbox
+            value={data.title}
+            accessibilityLabel="menu-filter"
+            // onPress={() => setSelectedId(item.title)}
+            onChange={() => {
+              handleChange(data.id);
+            }}
           />
         </View>
       )}
@@ -82,7 +86,7 @@ const CardScoring = ({data, route}) => {
             <View style={{backgroundColor: backgroundColor, borderRadius: 20}}>
               <Text
                 style={{
-                  paddingHorizontal: 10,
+                  paddingHorizontal: 8,
                   paddingVertical: 5,
                   color: 'white',
                 }}>
@@ -104,6 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     // borderWidth: 0.1,
+    paddingHorizontal: 16,
     borderColor: '#085D7A',
     height: '15%',
     // width: '98%',

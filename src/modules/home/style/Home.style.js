@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
     width: windowWidth * 0.44,
     height: 160,
     backgroundColor: 'white',
-    borderRadius: 13,
-    padding: 5,
+    borderRadius: 13, // untuk buat lengkungan siku
+    padding: 5, // untung ngatur jarak content didalam container
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -57,14 +57,16 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   titleContainer: {
-    flex: 1.5,
-    flexDirection: 'row',
-    alignItems: 'center',
+    // flex: 1.5,
+    // flexDirection: 'row',
+    // marginRight: 25,
+    // alignItems: 'center',
     paddingLeft: 15,
     paddingTop: 5,
   },
   countContainer: {
-    flex: 2,
+    marginTop: 12,
+    // flex: 2,
     alignItems: 'center',
   },
   actionContainer: {

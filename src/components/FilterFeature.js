@@ -3,7 +3,7 @@ import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const FilterFeature = ({icon, filter, onPress}) => {
-  console.log('msmamsa', icon);
+  // console.log('msmamsa', icon);
   return (
     <TouchableOpacity onPress={onPress}>
       <View

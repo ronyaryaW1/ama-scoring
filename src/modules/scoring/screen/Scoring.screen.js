@@ -19,33 +19,29 @@ import {Checkbox, NativeBaseProvider} from 'native-base';
 import _ from 'lodash';
 
 const Scoring = props => {
-  console.log('route', props?.route?.params?.route);
   const {navigation, route} = props;
   const [modalVisible, setModalVisible] = useState(false);
   const getData = require('../json/filter.json');
   const getContent = require('../json/data');
   const [data, setData] = useState(getData);
-  // const filterActive = require('../../../assets/icon/filterActive.png');
-  // const SortActive = require('../../../assets/icon/sortActive.png');
-  // const Sort = require('../../../assets/icon/Sort.png');
-  // const Filter = require('../../../assets/icon/Filter.png');
   const SortJson = require('../json/sort.json');
   const [selecTId, setSelectedId] = useState();
   const [selectFilter, setSelectFilter] = useState();
   const [filterSelect, setFilterSelect] = useState(false);
   const isCompare = props?.route?.params?.route === 'compare';
-  console.log('isSelect', filterSelect);
+  const [isReset, setIsReset] = useState(false);
 
   const [content, setContent] = useState(getContent);
-  const handleChange = id => {
-    setFilterSelect(true);
+  const handleChange = async id => {
+    await setFilterSelect(true);
     let temp = data.map(product => {
       if (id === product.id) {
         return {...product, isChecked: !product.isChecked};
       }
       return product;
     });
-    setData(temp);
+    await setData(temp);
+    await setSelectedId(id);
   };
   let selectedFilter = data.filter(product => product.isChecked);
 
@@ -70,11 +66,16 @@ const Scoring = props => {
   const onPressFIlter = () => {
     setSelectFilter('Filter');
     setModalVisible(true);
+    setData(getData);
+    setSelectedId();
+    console.log('daftasa', data);
   };
 
   const onRsetFilter = () => {
-    setSelectFilter();
+    setIsReset(true);
+    // setSelectFilter();
     setSelectedId();
+    setData(getData);
   };
 
   let datas;
@@ -88,7 +89,7 @@ const Scoring = props => {
     datas = newContent;
   }
   const menuSort = SortJson.find(x => x.title === selecTId);
-  const sort = _.orderBy(content, [menuSort?.comparator], [menuSort?.order]);
+  const sort = _.orderBy(datas, [menuSort?.comparator], [menuSort?.order]);
   if (menuSort !== undefined) {
     datas = sort;
   }
@@ -113,7 +114,7 @@ const Scoring = props => {
           borderColor: 'grey',
           borderWidth: 0.5,
           borderRadius: 20,
-          marginHorizontal: 12,
+          marginHorizontal: 8,
         }}>
         <View
           style={{
@@ -134,7 +135,13 @@ const Scoring = props => {
             </View>
           )}
           {title === 'Filter' && (
-            <View style={{justifyContent: 'center', marginRight: 8}}>
+            <View
+              style={{
+                justifyContent: 'center',
+                marginRight: 8,
+                // paddingLeft: 12,
+                // paddingVertical: 6,
+              }}>
               <Image
                 source={
                   title === selectFilter
@@ -149,6 +156,8 @@ const Scoring = props => {
             style={{
               color:
                 title === selecTId || title === selectFilter ? 'white' : 'grey',
+              // paddingVertical: 6,
+              paddingRight: title !== 'Filter' || title !== 'Sort' ? 0 : 12,
             }}>
             {title}
           </Text>
@@ -239,9 +248,10 @@ const Scoring = props => {
                               <Checkbox
                                 value={item.title}
                                 accessibilityLabel="menu-filter"
-                                onPress={() => setSelectedId(item.title)}
+                                // onPress={() => setSelectedId(item.title)}
                                 onChange={() => {
                                   handleChange(item.id);
+                                  // console.log('iddd', item.id);
                                 }}
                               />
                             </Checkbox.Group>

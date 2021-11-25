@@ -33,6 +33,7 @@ const Home = ({navigation}) => {
 
   console.log('ini data: ', data);
 
+  // tampilan dasar beserta kebutuhannya yaitu item,onPress,backgroundColor,textColor,disabled = false,titles,
   const Item = ({
     item,
     onPress,
@@ -48,11 +49,10 @@ const Home = ({navigation}) => {
       <Text style={[styles.textFilter, textColor]}>{item?.title}</Text>
     </TouchableOpacity>
   );
-
+  // renderItem ini yang memenuhi kebutuhan si Item
   const renderItem = ({item}) => {
     const backgroundColor = item.id === selectedId ? '#085D7A' : '#ffffff';
     const color = item.id === selectedId ? 'white' : 'grey';
-
     return (
       <Item
         item={item}
@@ -82,21 +82,16 @@ const Home = ({navigation}) => {
       <ScrollView>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: 'row', // mensejajarkan content
             padding: 20,
             flexWrap: 'wrap',
           }}>
-          {/* <Shadow distance={7} radius={20} offset={[0, 2]}> */}
           <LinearGradient
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             colors={['#DBE7EB', '#EFF2EA', '#FAF8EA']}
             style={[styles.cardContainer]}>
             <View style={styles.titleContainer}>
-              {/* <Image
-              source={require('../../../assets/icon/scoringIcon.png')}
-              style={styles.icon}
-            /> */}
               <Text style={styles.h1}>Scoring</Text>
             </View>
             <View style={styles.countContainer}>
@@ -196,7 +191,7 @@ const Home = ({navigation}) => {
             {/* content top score */}
             <View style={{marginTop: 24, marginBottom: 12}}>
               {datax.map((x, i) => {
-                console.log('datax', i);
+                // console.log('datax', i);
                 let backgroundColor;
                 let borderCOlor;
                 let fontCOlor;
@@ -210,7 +205,6 @@ const Home = ({navigation}) => {
                     backgroundColor = 'grey';
                     borderCOlor = 'grey';
                     fontCOlor = '#FFFFFF';
-
                     break;
                   case 2:
                     backgroundColor = '#DA9F65';
@@ -221,7 +215,6 @@ const Home = ({navigation}) => {
                   default:
                     borderCOlor = 'grey';
                     fontCOlor = '#7B7979';
-
                     break;
                 }
                 return (
