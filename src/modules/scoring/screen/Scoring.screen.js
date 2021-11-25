@@ -11,11 +11,12 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
+  TextInput,
 } from 'react-native';
 
 import CardScoring from '../../../components/CardScoring';
 import {FlatList} from 'react-native-gesture-handler';
-import {Checkbox, NativeBaseProvider} from 'native-base';
+import {Checkbox, KeyboardAvoidingView, NativeBaseProvider} from 'native-base';
 import _ from 'lodash';
 
 const Scoring = props => {
@@ -30,6 +31,8 @@ const Scoring = props => {
   const [filterSelect, setFilterSelect] = useState(false);
   const isCompare = props?.route?.params?.route === 'compare';
   const [isReset, setIsReset] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const [keyword, setKeyword] = useState();
 
   const [content, setContent] = useState(getContent);
   const handleChange = async id => {
@@ -79,7 +82,7 @@ const Scoring = props => {
   };
 
   let datas;
-  if (selecTId === 'All') {
+  if (selecTId === 'All' || selecTId === undefined) {
     datas = content;
   } else if (selecTId === 'Filter') {
     datas = content;
@@ -88,6 +91,15 @@ const Scoring = props => {
   } else {
     datas = newContent;
   }
+
+  let dataSearch;
+  if (keyword !== undefined) {
+    dataSearch = content?.filter(x =>
+      x.title?.toLowerCase().includes(keyword?.toLowerCase()),
+    );
+    datas = dataSearch;
+  }
+  console.log('dataSearch', dataSearch);
   const menuSort = SortJson.find(x => x.title === selecTId);
   const sort = _.orderBy(datas, [menuSort?.comparator], [menuSort?.order]);
   if (menuSort !== undefined) {
@@ -183,209 +195,227 @@ const Scoring = props => {
       />
     </ScrollView>
   );
+
   return (
     <NativeBaseProvider>
-      <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.profileContainer}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
+      <KeyboardAvoidingView style={{flex: 1}}>
+        <View style={styles.container}>
+          {/* Header */}
+          <View style={styles.header}>
+            <View style={styles.profileContainer}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Image
+                  source={require('../../../assets/icon/back.png')}
+                  style={styles.imageBack}
+                />
+              </TouchableOpacity>
+              {isSearch ? (
+                <TextInput
+                  placeholder="Search by title"
+                  // onChange={text => setKeyword(text)}
+                  onChangeText={setKeyword}
+                  value={keyword}
+                />
+              ) : (
+                <Text style={styles.name}>
+                  {isCompare ? 'Compare' : 'Scoring'}
+                </Text>
+              )}
+            </View>
+            <TouchableOpacity onPress={() => setIsSearch(true)}>
               <Image
-                source={require('../../../assets/icon/back.png')}
-                style={styles.imageBack}
+                source={require('../../../assets/icon/search.png')}
+                style={styles.bellIcon}
               />
             </TouchableOpacity>
-            <Text style={styles.name}>{isCompare ? 'Compare' : 'Scoring'}</Text>
           </View>
-          <Image
-            source={require('../../../assets/icon/search.png')}
-            style={styles.bellIcon}
-          />
-        </View>
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={selectFilter !== undefined && modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.centeredcontainer}>
-              <View style={styles.modalView}>
-                <TouchableOpacity onPress={() => setModalVisible(false)}>
-                  <Image
-                    source={require('../../../assets/icon/line.png')}
-                    style={styles.imageModal}
-                  />
-                </TouchableOpacity>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.textTitle}>
-                    {selectFilter === 'Filter'
-                      ? 'Filter'
-                      : selectFilter === 'Sort' && 'Sort By'}
-                  </Text>
-                  {selectFilter === 'Filter' && (
-                    <TouchableOpacity onPress={() => onRsetFilter()}>
-                      <Text style={styles.textReset}>Reset Filter</Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
-                <View style={styles.inputContainer}>
-                  {selectFilter === 'Filter' && (
-                    <Text style={styles.textTitle}>Theme</Text>
-                  )}
-                  <FlatList
-                    data={selectFilter === 'Filter' ? data : SortJson}
-                    renderItem={({item, index}) => (
-                      <View key={index}>
-                        {/* filter fitur */}
-                        {selectFilter === 'Filter' && (
-                          <View style={styles.contentContainer}>
-                            <Text style={styles.textContent}>{item.title}</Text>
-                            <Checkbox.Group>
-                              <Checkbox
-                                value={item.title}
-                                accessibilityLabel="menu-filter"
-                                // onPress={() => setSelectedId(item.title)}
-                                onChange={() => {
-                                  handleChange(item.id);
-                                  // console.log('iddd', item.id);
-                                }}
-                              />
-                            </Checkbox.Group>
-                          </View>
-                        )}
-                        {selectFilter === 'Sort' && (
-                          <View style={styles.contentContainer}>
-                            <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={selectFilter !== undefined && modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+              setModalVisible(!modalVisible);
+            }}>
+            <View style={styles.centeredView}>
+              <View style={styles.centeredcontainer}>
+                <View style={styles.modalView}>
+                  <TouchableOpacity onPress={() => setModalVisible(false)}>
+                    <Image
+                      source={require('../../../assets/icon/line.png')}
+                      style={styles.imageModal}
+                    />
+                  </TouchableOpacity>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.textTitle}>
+                      {selectFilter === 'Filter'
+                        ? 'Filter'
+                        : selectFilter === 'Sort' && 'Sort By'}
+                    </Text>
+                    {selectFilter === 'Filter' && (
+                      <TouchableOpacity onPress={() => onRsetFilter()}>
+                        <Text style={styles.textReset}>Reset Filter</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                  <View style={styles.inputContainer}>
+                    {selectFilter === 'Filter' && (
+                      <Text style={styles.textTitle}>Theme</Text>
+                    )}
+                    <FlatList
+                      data={selectFilter === 'Filter' ? data : SortJson}
+                      renderItem={({item, index}) => (
+                        <View key={index}>
+                          {/* filter fitur */}
+                          {selectFilter === 'Filter' && (
+                            <View style={styles.contentContainer}>
                               <Text style={styles.textContent}>
                                 {item.title}
                               </Text>
-                            </View>
-                            <TouchableOpacity
-                              onPress={() => setSelectedId(item.title)}>
-                              <View
-                                style={{
-                                  width: 14,
-                                  height: 14,
-                                  borderRadius: 20,
-                                  borderWidth: 1,
-                                  borderColor:
-                                    item.title === selecTId
-                                      ? '#085D7A'
-                                      : 'grey',
-                                  justifyContent: 'center',
-                                  alignItems: 'center',
-                                }}>
-                                <View
-                                  style={{
-                                    width: 10,
-                                    height: 10,
-                                    borderRadius: 20,
-                                    backgroundColor:
-                                      item.title === selecTId
-                                        ? '#085D7A'
-                                        : '#FFFFFF',
-                                    alignSelf: 'center',
+                              <Checkbox.Group>
+                                <Checkbox
+                                  value={item.title}
+                                  accessibilityLabel="menu-filter"
+                                  // onPress={() => setSelectedId(item.title)}
+                                  onChange={() => {
+                                    handleChange(item.id);
+                                    // console.log('iddd', item.id);
                                   }}
                                 />
+                              </Checkbox.Group>
+                            </View>
+                          )}
+                          {selectFilter === 'Sort' && (
+                            <View style={styles.contentContainer}>
+                              <View>
+                                <Text style={styles.textContent}>
+                                  {item.title}
+                                </Text>
                               </View>
-                            </TouchableOpacity>
-                          </View>
-                        )}
-                      </View>
-                    )}
-                  />
-                  <FlatList
-                    data={selected}
-                    renderItem={({item}) => (
-                      <View style={styles.contentContainer}>
-                        <Text style={styles.textContent}>{item.title}</Text>
-                      </View>
-                    )}
-                  />
-                </View>
-                {selectFilter === 'Filter' && (
-                  <View style={styles.buttonContainer}>
-                    <View style={styles.buttoncancel}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setModalVisible(false);
-                        }}>
-                        <Text style={styles.save}>Save</Text>
-                      </TouchableOpacity>
-                    </View>
+                              <TouchableOpacity
+                                onPress={() => setSelectedId(item.title)}>
+                                <View
+                                  style={{
+                                    width: 14,
+                                    height: 14,
+                                    borderRadius: 20,
+                                    borderWidth: 1,
+                                    borderColor:
+                                      item.title === selecTId
+                                        ? '#085D7A'
+                                        : 'grey',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                  }}>
+                                  <View
+                                    style={{
+                                      width: 10,
+                                      height: 10,
+                                      borderRadius: 20,
+                                      backgroundColor:
+                                        item.title === selecTId
+                                          ? '#085D7A'
+                                          : '#FFFFFF',
+                                      alignSelf: 'center',
+                                    }}
+                                  />
+                                </View>
+                              </TouchableOpacity>
+                            </View>
+                          )}
+                        </View>
+                      )}
+                    />
+                    <FlatList
+                      data={selected}
+                      renderItem={({item}) => (
+                        <View style={styles.contentContainer}>
+                          <Text style={styles.textContent}>{item.title}</Text>
+                        </View>
+                      )}
+                    />
                   </View>
-                )}
+                  {selectFilter === 'Filter' && (
+                    <View style={styles.buttonContainer}>
+                      <View style={styles.buttoncancel}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setModalVisible(false);
+                          }}>
+                          <Text style={styles.save}>Save</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  )}
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
-        {/* EndPopup */}
+          </Modal>
+          {/* EndPopup */}
 
-        {/* Content */}
-        <View style={{flex: 1}}>
-          <FlatList
-            ListHeaderComponent={Menutab}
-            ListEmptyComponent={ListEmprtyData}
-            data={selecTId ? datas : content}
-            renderItem={({item}) =>
-              isCompare === true ? (
-                <CardScoring data={item} route={route?.params?.route} />
-              ) : (
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('InnovationTabs')}>
+          {/* Content */}
+          <View style={{flex: 1}}>
+            <FlatList
+              ListHeaderComponent={Menutab}
+              ListEmptyComponent={ListEmprtyData}
+              data={datas}
+              renderItem={({item}) =>
+                isCompare === true ? (
                   <CardScoring data={item} route={route?.params?.route} />
-                </TouchableOpacity>
-              )
-            }
-          />
-          {isCompare && (
-            <View>
-              <View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  height: 55,
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
-                  backgroundColor: '#FFFF',
-                }}>
-                <View>
-                  <Text
-                    style={{
-                      color: '#231F20',
-                      fontWeight: 'bold',
-                      fontSize: 14,
-                    }}>
-                    0
-                  </Text>
-                </View>
-                <View>
-                  <Text style={{color: '#231F20', fontSize: 14}}>
-                    Ideas have been selected
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Compare')}
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('InnovationTabs')}>
+                    <CardScoring data={item} route={route?.params?.route} />
+                  </TouchableOpacity>
+                )
+              }
+            />
+            {isCompare && (
+              <View>
+                <View
                   style={{
-                    backgroundColor: '#CDCDCD',
-                    width: 122,
-                    height: 32,
-                    borderRadius: 40,
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    width: '100%',
+                    flexDirection: 'row',
+                    height: 55,
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    backgroundColor: '#FFFF',
                   }}>
-                  <Text style={{fontWeight: '100'}}>Compare 0 Ideas</Text>
-                </TouchableOpacity>
+                  <View>
+                    <Text
+                      style={{
+                        color: '#231F20',
+                        fontWeight: 'bold',
+                        fontSize: 14,
+                      }}>
+                      0
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={{color: '#231F20', fontSize: 14}}>
+                      Ideas have been selected
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Compare')}
+                    style={{
+                      backgroundColor: '#CDCDCD',
+                      width: 122,
+                      height: 32,
+                      borderRadius: 40,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{fontWeight: '100'}}>Compare 0 Ideas</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-          )}
+            )}
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </NativeBaseProvider>
   );
 };
