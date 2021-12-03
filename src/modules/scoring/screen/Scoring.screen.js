@@ -30,7 +30,6 @@ const Scoring = props => {
   const [selectFilter, setSelectFilter] = useState();
   const [filterSelect, setFilterSelect] = useState(false);
   const isCompare = props?.route?.params?.route === 'compare';
-  const [isReset, setIsReset] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [keyword, setKeyword] = useState();
 
@@ -75,20 +74,25 @@ const Scoring = props => {
   };
 
   const onRsetFilter = () => {
-    setIsReset(true);
+    // setIsReset(true);
     // setSelectFilter();
     setSelectedId();
     setData(getData);
   };
+  console.log('dasdadsa', selecTId);
 
   let datas;
   if (selecTId === 'All' || selecTId === undefined) {
+    console.log('sasas');
     datas = content;
   } else if (selecTId === 'Filter') {
+    console.log('sadasda2');
     datas = content;
   } else if (selecTId === 'Sort') {
+    console.log('dasad3');
     datas = content;
   } else {
+    console.log('dasdad4');
     datas = newContent;
   }
 
@@ -99,9 +103,10 @@ const Scoring = props => {
     );
     datas = dataSearch;
   }
-  console.log('dataSearch', dataSearch);
+  const dataSort = filterSelect === true ? datas : content;
+  console.log('dataSearch', datas);
   const menuSort = SortJson.find(x => x.title === selecTId);
-  const sort = _.orderBy(datas, [menuSort?.comparator], [menuSort?.order]);
+  const sort = _.orderBy(dataSort, [menuSort?.comparator], [menuSort?.order]);
   if (menuSort !== undefined) {
     datas = sort;
   }
